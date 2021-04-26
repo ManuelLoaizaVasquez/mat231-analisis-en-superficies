@@ -1,0 +1,321 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts,latexsym,amsthm,amssymb,amsmath,amscd,euscript}
+\usepackage{mathtools}
+\usepackage{framed}
+% Descomentar fullpage cuando se quiera utilizar menos margen horizontal
+%\usepackage{fullpage}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true,citecolor=blue,urlcolor =black,linkbordercolor={1 0 0}}
+\usepackage{cleveref}% http://ctan.org/pkg/cleveref
+\newenvironment{statement}[1]{\smallskip\noindent\color[rgb]{1.00,0.00,0.50} {\bf #1.}}{}
+\allowdisplaybreaks[1]
+
+% Comandos para teoremas, definiciones, ejemplos, lemas, etc. para sus respectivos body types.
+\renewcommand*{\proofname}{Prueba}
+\renewcommand{\contentsname}{Contenido}
+
+\newtheorem{theorem}{Teorema}
+\newtheorem*{proposition}{Proposici\'on}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{conjecture}[theorem]{Conjetura}
+\newtheorem*{postulate}{Postulado}
+\theoremstyle{definition}
+\newtheorem{defn}[theorem]{Definici\'on}
+\newtheorem{example}[theorem]{Ejemplo}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Observaci\'on}
+\newtheorem*{notation}{Notaci\'on}
+\newtheorem*{note}{Nota}
+
+% Define tus comandos para hacer la vida más fácil.
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+% Funciones techo y suelo
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% Referencia inteligente a los lemas
+\crefname{lemma}{Lema}{Lemas}
+
+\title{MAT231 An\'alisis en Superficies}
+\author{Manuel Loaiza Vasquez}
+\date{Abril 2021}
+
+\begin{document}
+
+\maketitle
+
+\vspace*{-0.25in}
+\centerline{Pontificia Universidad Cat\'olica del Per\'u}
+\centerline{Lima, Per\'u}
+\centerline{\href{mailto:manuel.loaiza@pucp.edu.pe}{{\tt manuel.loaiza@pucp.edu.pe}}}
+\vspace*{0.15in}
+
+\begin{framed}
+  Solucionario de la primera pr\'actica del curso de An\'alisis en Superficies
+  de la especialidad de Matem\'aticas de la Facultad de Ciencias e Ingenier\'ias
+  dictado por el profesor Alfredo Poirier.
+\end{framed}
+
+\begin{statement}{1}
+  Recu\'erdese que un \textbf{anillo con unidad ${\cal A}$} es un conjunto donde
+  existe una suma y un producto sujetos a varias propiedades de compatibilidad. 
+  Aditivamente debe ser un grupo conmutativo; es decir,  la operaci\'on es
+  asociativa y conmutativa,  cuenta con un \'unico elemento neutro $0$ y todo
+  elemento $a$ tiene una inversa $-a$. 
+  Multiplicativamente tambi\'en es asociativa y conmutativa y existe un \'unico
+  elemento, denotado $1$,  que satisface $1 \cdot a=a$ para todo $a$. 
+  Estas operaciones deben ser distributivas una respecto a la otra.
+  En particular se cumple $0 \cdot a = a$ para todo $a$. 
+  
+  Una \textbf{derivaci\'on} es una transformaci\'on $d:{\cal A} \to {\cal A}$
+  que respeta suma (es decir cumple $D(a+b)=D(a)+D(b)$) y  obedece la llamada
+  regla de Leibnitz: se satisface $D(ab)=aD(b)+ D(a)b$.
+
+  \begin{enumerate}
+    \item Demuestre que siempre se cumple $D(0)=D(1)=0$. 
+    Pruebe $D(na)=nD(a)$, para $n$ entero; ac\'a $na$ se interpreta como la
+    acci\'on aditiva aplicada $n$ veces (ojo que $n$ puede ser tambi\'en negativo).
+    \item Sea $\BZ[x]$ el anillo de los polinomios de coeficientes enteros. 
+    Si se define una derivaci\'on sujeta a  $D(mx)=mx^2$ para todo $m \in \BZ$, 
+    demuestre que se cumple $D(mx^n)=mn x^{n+1}$ para todo $m \in \BZ$ y
+    potencia no negativa $n$. 
+    (Cuidado: para $n=0$ esto debe ser interpretado como $D(m)=0$.)
+  \end{enumerate}
+\end{statement}
+
+\begin{proof}
+  Probemos lo solicitado de manera directa:
+  \begin{enumerate}
+    \item Para $0 \in \mathcal{A}$ tenemos $D(0) = D(0 + 0) = D(0) + D(0)$ y
+    sum\'andole la inversa a cada lado obtenemos $D(0) = 0$.
+    Para $1 \in \mathcal{A}$ utilizaremos la regla de Leibnitz
+    $D(1) = D(1 \cdot 1) = 1 \cdot D(1) + D(1) \cdot 1$
+    donde utilizando las propiedades del anillo con unidad nos permite concluir
+    con $D(1) = 0$.
+    
+    El siguiente lema nos permitir\'a finiquitar el negocio con la mitad de
+    trabajo.
+    
+    \begin{lemma}\label{lema01}
+      Dado $a \in \mathcal{A}$ se cumple $D(-a) = -D(a)$.
+    \end{lemma}
+    
+    \begin{proof}
+      Utilicemos el hecho de que la derivaci\'on respeta la suma y que $D(0) = 0$.
+      \begin{align*}
+        D(0) &= D(a + (-a))\\
+        &= D(a) + D(-a)\\
+        0 &= D(a) + D(-a)\\
+        -D(a) &= D(-a).
+      \end{align*}
+    \end{proof}
+
+    \begin{lemma}\label{lema02}
+      Dados $a, b \in \mathcal{A}$, se cumple $(-a)b = -(ab)$.
+    \end{lemma}
+    \begin{proof}
+      Verifiquemos que son inversas aditivas utilizando la asociatividad
+      \[
+        (-a)b + ab = ((-a) + a) b = 0 \cdot b = 0
+      \]
+      para concluir que la igualdad se cumple.
+    \end{proof}
+    Para probar que $D(na) = nD(a)$, nos centraremos en probarlo para los
+    valores de $n$ enteros positivos, pues al hacer uso de \cref{lema01}
+    tenemos de regalo que se cumple para valores de $n$ negativos.
+
+    Procedamos a realizar la prueba por inducci\'on. Para $n = 1$ tenemos que
+    $D(1 \cdot a) = D(a) = 1 \cdot D(a)$. Supongamos que se cumple para $n$.
+    Verifiquemos lo que ocurre para $n + 1$ aprovech\'andos de las propiedades
+    distributivas y asociativas:
+    \[
+      D((n + 1) a) = D(na + a) = D(na) + D(a) = nD(a) + D(a) = (n + 1) D(a).  
+    \]
+    Concluimos que $D(na) = nD(a)$ para todo $n$ entero positivo.
+    Cuando $n = 0$, previamente obtuvimos $D(0 \cdot a) = D(0) = 0 = 0 \cdot D(a)$.
+    Cuando $n$ es un entero negativo, podemos escribirlo como $n = -m$ con $m > 0$.
+    De \cref{lema02} tenemos $D(na) = D((-m)a) = D(-ma)$ y por \cref{lema01}
+    la igualdad $-D(ma) = -(mDa) = (-m) D(a) = n D(a)$ cae por s\'i sola.
+
+    \item Probemos por inducci\'on que $D(x^n) = nx^{n+1}$.
+    Realizaremos la inducci\'on sobre el exponente. Para $n = 0$, tenemos
+    $D(1) = 0 = 0 \cdot x^{1}$ y para $n = 1$, $D(x) = x^2$ por la definici\'on
+    dada. Supongamos que se cumple para $n$, luego
+    $D(x^{n + 1})  = D(x \cdot x^n) = x D(x^n) + D(x) x^n =
+    x n x^{n + 1} + x^2 x^n = n x^{n + 2} + x^{n + 2} = (n + 1)x^{n + 2}$.
+    
+    Finalmente, haciendo uso del primer inciso tenemos que para cualquier
+    n\'umero entero $m$ se cumple $D(mx^{n}) = m D(x^n) = mnx^{n + 1}$.
+  \end{enumerate}
+\end{proof}
+
+\begin{statement}{2}
+  Una \textbf{$0$-forma diferencial} en tres variables es simplemente una
+  funci\'on de variable real que es infinitamente diferenciable.
+  Similarmente, una \textbf{$1$-forma} es una expresi\'on tipo 
+  \[
+    \omega = F \, dx + G \, dy + H \, dz,
+  \]
+  con $F, G, H$ infinitamente diferenciables; una \textbf{$2$-forma} toma la forma  
+  \[
+    \gamma = \alpha \, dx \, dy + \beta \, dx \, dz + \eta \, dy \, dz; 
+  \]
+  y una \textbf{$3$-forma} resulta ser 
+  \[
+    v \, dx \, dy \, dz.
+  \]
+  Estos espacios son denotados $\wedge^0, \wedge^1, \wedge^2, \wedge^3$, respectivamente. 
+  Para $f(x,y,z) \in \wedge^0$ se define 
+  \[
+    df=\frac{\partial f}{\partial x} \, dx +
+    \frac{\partial f}{\partial y} \, dy
+    + \frac{\partial f}{\partial z} \, dz
+    \in \wedge^1.
+  \]
+  Si solo est\'a permitido tomar derivadas parciales, cambiar de signo y reordenar, 
+  ?`c\'omo se deber\'ia definir $d:\wedge^1 \to \wedge^2$ para tener $d^2=d \circ d =0$? 
+  Si tomamos su respuesta como referencia,
+  ?`como ser\'ia razonable definir $d:\wedge^2 \to \wedge^3$?
+  
+  Nota: resulta \'util recordar que para funciones infinitamente diferenciables se cumple
+  \[
+    \frac{\partial^2 f}{\partial x_j \partial x_i}= \frac{\partial^2 f}{\partial x_i \partial x_j}.
+  \]
+\end{statement}
+
+\begin{proof}
+  Convenientemente, definimos $d: \wedge^1 \to \wedge^2$ con
+  \[
+    d(F \, dx + G \, dy + H \, dz)  =
+    \left(\frac{\partial F}{\partial y} - \frac{\partial G}{\partial x}\right) dx \, dy +
+    \left(\frac{\partial F}{\partial z} - \frac{\partial H}{\partial x}\right) dx \, dz +
+    \left(\frac{\partial G}{\partial z} - \frac{\partial H}{\partial y}\right) dy \, dz.
+  \]
+  Dada una funci\'on $f$ infinitamente diferenciable, aplicando nuestras
+  funciones definidas previamente y la nota obtenemos
+  \begin{align*}
+    d^2 f &= d(df)\\
+    &= d \left( \frac{\partial f}{\partial x} \, dx +
+    \frac{\partial f}{\partial y} \, dy
+    + \frac{\partial f}{\partial z} \, dz \right)\\
+    &=
+    \left(\frac{\partial^2 f}{\partial y \partial x} - \frac{\partial^2 f}{\partial x \partial y}\right) dx \, dy +
+    \left(\frac{\partial^2 f}{\partial z \partial x} - \frac{\partial^2 f}{\partial x \partial z}\right) dx \, dz +
+    \left(\frac{\partial^2 f}{\partial z \partial y} - \frac{\partial^2 f}{\partial y \partial z}\right) dy \, dz\\
+    &=
+    \left(\frac{\partial^2 f}{\partial x \partial y} - \frac{\partial^2 f}{\partial x \partial y}\right) dx \, dy +
+    \left(\frac{\partial^2 f}{\partial x \partial z} - \frac{\partial^2 f}{\partial x \partial z}\right) dx \, dz +
+    \left(\frac{\partial^2 f}{\partial y \partial z} - \frac{\partial^2 f}{\partial y \partial z}\right) dy \, dz\\
+    &= 0.
+  \end{align*}
+
+  Ahora definamos $d: \wedge^2 \to \wedge^3$ con
+  \[
+    d(\alpha \, dx \, dy + \beta \, dx \, dz + \eta \, dy \, dz) =
+    \left(
+      \frac{\partial \alpha}{\partial z} +
+      \frac{\partial \beta}{\partial y} +
+      \frac{\partial \eta}{\partial x}
+    \right)
+    dx \, dy \, dz;
+  \]
+  donde $\alpha, \beta$ y $\eta$ son infinitamente diferenciables.
+  Lo que es trivial, es trivial, y no hay verg\"uenza alguna de decir que
+  algo es trivial. En consecuencia, dado $\omega = F \, dx + G \, dy + H \, dz$
+  obtenemos $d^2 \omega = 0$.
+\end{proof}
+
+\begin{statement}{3}
+  Demuestre lo que hemos dado por llamar la protodesigualdad de Chebyshev: 
+  \textit{
+    si $f$ es acotada en $R$ y $\pi$ es una partici\'on de $R$ 
+    definimos $\pi^\eta=\{S \in \pi: M_S(f)-m_S(f) \ge \eta\}$.
+    Entonces se cumple 
+    \[
+      \sum_{S \in \pi^\eta} v(S) \le \frac{U(f,\pi)-L(f,\pi)}{\eta}. 
+    \]
+  }
+\end{statement}
+
+\begin{proof}
+\end{proof}
+
+\begin{statement}{4}
+\end{statement}
+
+\begin{proof}
+\end{proof}
+
+\begin{statement}{5}
+\end{statement}
+
+\begin{proof}
+\end{proof}
+
+\begin{statement}{6}
+  Considere el cuadrado con v\'ertices $(0,1),(1,0),(-1,0)$ y $(0,-1)$ en el
+  plano. Aproxime desde dentro su \'area con rect\'angulos que en conjunto
+  sumen al menos $2 -\epsilon$. Similarmente, aproxime desde fuera su \'area
+  con rect\'angulos (o cuadrados) que en conjunto no superen $2 + \epsilon$.
+\end{statement}
+
+\begin{proof}
+  Primero hallemos una aproximaci\'on del \'area mediante rect\'angulos en el
+  interior del cuadrado dado analizando el tri\'angilo con v\'ertices $(0, 1), (1, 0)$
+  y $(-1, 0)$; luego el proceso para hallar el \'area del tri\'angulo inferior
+  con v\'ertices $(1, 0), (-1, 0)$ y $(0, -1)$ es an\'alogo.
+  Dado un $\epsilon$ positivo fijo pero arbitrario, quiero que el \'area de los
+  rect\'angulos interiores al tri\'angulo superior sumen al menos
+  $1 - \epsilon / 2$. Dividiremos el intervalo $[0, 1]$ del eje $y$ en $n$ partes
+  pero tan solo utilizar\'e los $n - 1$ intervalos $[(i - 1) / n, i / n]$ donde
+  $i$ toma los valores desde $1$ hasta $n - 1$. De esta manera, el rect\'angulo
+  que tomaremos en cada intervalo ser\'a aquel cuyos v\'ertices sean
+  las intersecciones de los lados del cuadrado con extremos $(1, 0)$ y $(0, 1)$
+  y extremos $(-1, 0)$ y $(0, 1)$ con las rectas paralelas al eje $x$ que
+  pasan por los extremos de nuestros intervalos $[(i - 1) / n, i / n]$.
+  De esta manera, tenemos que el $i$-\'esimo rect\'angulo tiene como v\'ertices
+  a los puntos
+  $(1 - i / n, (i - 1) / n),
+  (-1 + i / n, (i - 1) / n),
+  (-1 + i / n, i / n) \text{ y }
+  (1 - i / n, i / n)$.
+  \begin{align*}
+    v(T) &= \sum_{i = 1}^{n - 1} \left(2 - \frac{2i}{n}\right) \frac{1}{n}\\
+    &= \frac{2 (n - 1)}{n} - \frac{2 (n - 1) n}{2n^2}\\
+    &= \frac{n - 1}{n}.
+  \end{align*}
+  Para $\epsilon \leq 2$, trivialmente $n = 2$ satisface con la desigualdad.
+  Cuando $\epsilon < 2$, tenemos que $n = \ceil*{2 / \epsilon}$ cumple con lo
+  requerido, pues
+  \begin{align*}
+    n &\geq \frac{2}{\epsilon}\\
+    \frac{\epsilon}{2} &\geq \frac{1}{n}\\
+    \frac{n - 1}{n} &\geq 1 - \frac{\epsilon}{2}\\
+    v(T) &\geq 1 - \frac{\epsilon}{2}.
+  \end{align*}
+  An\'alogamente, el volumen de la construcci\'on inferior es mayor o igual
+  a $1 - \frac{\epsilon}{2}$. As\'i, concluimos que la suma de vol\'umenes
+  es mayor o igual a $2 - \epsilon$.
+
+  Ahora hallemos una aproximaci\'on del \'area mediante rect\'angulos
+  externos. Sea el $i$-\'esimo rect\'angulo con v\'ertices los puntos
+  $(-1 + \frac{i - 1}{n}, \frac{i - 1}{n}),
+  (-1 + \frac{i - 1}{n}, \frac{i}{n}),
+  (1 - \frac{i - 1}{n}, \frac{i - 1}{n}) \text{ y }
+  (1 - \frac{i - 1}{n}, \frac{i}{n})$.
+
+  \begin{align*}
+    v(T) &= \sum_{i = 1}^n 
+  \end{align*}
+\end{proof}
+
+\end{document}
