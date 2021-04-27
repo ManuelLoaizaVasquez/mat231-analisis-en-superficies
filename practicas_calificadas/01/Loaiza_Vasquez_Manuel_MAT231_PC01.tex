@@ -1,0 +1,566 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsfonts,latexsym,amsthm,amssymb,amsmath,amscd,euscript}
+\usepackage{mathtools}
+\usepackage{framed}
+% Descomentar fullpage cuando se quiera utilizar menos margen horizontal
+%\usepackage{fullpage}
+\usepackage{hyperref}
+    \hypersetup{colorlinks=true,citecolor=blue,urlcolor =black,linkbordercolor={1 0 0}}
+\usepackage{cleveref}% http://ctan.org/pkg/cleveref
+\newenvironment{statement}[1]{\smallskip\noindent\color[rgb]{1.00,0.00,0.50} {\bf #1.}}{}
+\allowdisplaybreaks[1]
+
+% Comandos para teoremas, definiciones, ejemplos, lemas, etc. para sus respectivos body types.
+\renewcommand*{\proofname}{Prueba}
+\renewcommand{\contentsname}{Contenido}
+
+\newtheorem{theorem}{Teorema}
+\newtheorem*{proposition}{Proposici\'on}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{conjecture}[theorem]{Conjetura}
+\newtheorem*{postulate}{Postulado}
+\theoremstyle{definition}
+\newtheorem{defn}[theorem]{Definici\'on}
+\newtheorem{example}[theorem]{Ejemplo}
+
+\theoremstyle{remark}
+\newtheorem*{remark}{Observaci\'on}
+\newtheorem*{notation}{Notaci\'on}
+\newtheorem*{note}{Nota}
+
+% Define tus comandos para hacer la vida más fácil.
+\newcommand{\BR}{\mathbb R}
+\newcommand{\BC}{\mathbb C}
+\newcommand{\BF}{\mathbb F}
+\newcommand{\BQ}{\mathbb Q}
+\newcommand{\BZ}{\mathbb Z}
+\newcommand{\BN}{\mathbb N}
+
+% Funciones techo y suelo
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor}
+
+% Integral inferior y superior
+\makeatletter
+\newcommand\tint{\mathop{\mathpalette\tb@int{t}}\!\int}
+\newcommand\bint{\mathop{\mathpalette\tb@int{b}}\!\int}
+\newcommand\tb@int[2]{%
+  \sbox\z@{$\m@th#1\int$}%
+  \if#2t%
+    \rlap{\hbox to\wd\z@{%
+      \hfil
+      \vrule width .35em height \dimexpr\ht\z@+1.4pt\relax depth -\dimexpr\ht\z@+1pt\relax
+      \kern.05em % a small correction on the top
+    }}
+  \else
+    \rlap{\hbox to\wd\z@{%
+      \vrule width .35em height -\dimexpr\dp\z@+1pt\relax depth \dimexpr\dp\z@+1.4pt\relax
+      \hfil
+    }}
+  \fi
+}
+\makeatother
+
+% Referencia inteligente a los lemas
+\crefname{lemma}{Lema}{Lemas}
+
+\title{MAT231 An\'alisis en Superficies}
+\author{Manuel Loaiza Vasquez}
+\date{Abril 2021}
+
+\begin{document}
+
+\maketitle
+
+\vspace*{-0.25in}
+\centerline{Pontificia Universidad Cat\'olica del Per\'u}
+\centerline{Lima, Per\'u}
+\centerline{\href{mailto:manuel.loaiza@pucp.edu.pe}{{\tt manuel.loaiza@pucp.edu.pe}}}
+\vspace*{0.15in}
+
+\begin{framed}
+  Solucionario de la primera pr\'actica del curso de An\'alisis en Superficies
+  de la especialidad de Matem\'aticas de la Facultad de Ciencias e Ingenier\'ias
+  dictado por el profesor Alfredo Poirier.
+\end{framed}
+
+\begin{statement}{1}
+  Recu\'erdese que un \textbf{anillo con unidad $\mathcal{A}$} es un conjunto donde
+  existe una suma y un producto sujetos a varias propiedades de compatibilidad. 
+  Aditivamente debe ser un grupo conmutativo; es decir,  la operaci\'on es
+  asociativa y conmutativa,  cuenta con un \'unico elemento neutro $0$ y todo
+  elemento $a$ tiene una inversa $-a$. 
+  Multiplicativamente tambi\'en es asociativa y conmutativa y existe un \'unico
+  elemento, denotado $1$,  que satisface $1 \cdot a=a$ para todo $a$. 
+  Estas operaciones deben ser distributivas una respecto a la otra.
+  En particular se cumple $0 \cdot a = a$ para todo $a$. 
+  
+  Una \textbf{derivaci\'on} es una transformaci\'on $d:{\cal A} \to {\cal A}$
+  que respeta suma (es decir cumple $D(a+b)=D(a)+D(b)$) y  obedece la llamada
+  regla de Leibnitz: se satisface $D(ab)=aD(b)+ D(a)b$.
+
+  \begin{enumerate}
+    \item Demuestre que siempre se cumple $D(0)=D(1)=0$. 
+    Pruebe $D(na)=nD(a)$, para $n$ entero; ac\'a $na$ se interpreta como la
+    acci\'on aditiva aplicada $n$ veces (ojo que $n$ puede ser tambi\'en negativo).
+    \item Sea $\BZ[x]$ el anillo de los polinomios de coeficientes enteros. 
+    Si se define una derivaci\'on sujeta a  $D(mx)=mx^2$ para todo $m \in \BZ$, 
+    demuestre que se cumple $D(mx^n)=mn x^{n+1}$ para todo $m \in \BZ$ y
+    potencia no negativa $n$. 
+    (Cuidado: para $n=0$ esto debe ser interpretado como $D(m)=0$.)
+  \end{enumerate}
+\end{statement}
+
+\begin{proof}
+  Probemos lo solicitado de manera directa:
+  \begin{enumerate}
+    \item Para $0 \in \mathcal{A}$ tenemos $D(0) = D(0 + 0) = D(0) + D(0)$ y
+    sum\'andole la inversa a cada lado obtenemos $D(0) = 0$.
+    Para $1 \in \mathcal{A}$ utilizaremos la regla de Leibnitz
+    $D(1) = D(1 \cdot 1) = 1 \cdot D(1) + D(1) \cdot 1$
+    donde utilizando las propiedades del anillo con unidad nos permite concluir
+    con $D(1) = 0$.
+    
+    El siguiente lema nos permitir\'a finiquitar el negocio con la mitad de
+    trabajo.
+    
+    \begin{lemma}\label{lema01}
+      Dado $a \in \mathcal{A}$ se cumple $D(-a) = -D(a)$.
+    \end{lemma}
+    
+    \begin{proof}
+      Utilicemos el hecho de que la derivaci\'on respeta la suma y que $D(0) = 0$.
+      \begin{align*}
+        D(0) &= D(a + (-a))\\
+        &= D(a) + D(-a)\\
+        0 &= D(a) + D(-a)\\
+        -D(a) &= D(-a).
+      \end{align*}
+    \end{proof}
+
+    \begin{lemma}\label{lema02}
+      Dados $a, b \in \mathcal{A}$, se cumple $(-a)b = -(ab)$.
+    \end{lemma}
+    \begin{proof}
+      Verifiquemos que son inversas aditivas utilizando la asociatividad
+      \[
+        (-a)b + ab = ((-a) + a) b = 0 \cdot b = 0
+      \]
+      para concluir que la igualdad se cumple.
+    \end{proof}
+    Para probar que $D(na) = nD(a)$, nos centraremos en probarlo para los
+    valores de $n$ enteros positivos, pues al hacer uso de \cref{lema01}
+    tenemos de regalo que se cumple para valores de $n$ negativos.
+
+    Procedamos a realizar la prueba por inducci\'on. Para $n = 1$ tenemos que
+    $D(1 \cdot a) = D(a) = 1 \cdot D(a)$. Supongamos que se cumple para $n$.
+    Verifiquemos lo que ocurre para $n + 1$ aprovech\'andos de las propiedades
+    distributivas y asociativas:
+    \[
+      D((n + 1) a) = D(na + a) = D(na) + D(a) = nD(a) + D(a) = (n + 1) D(a).  
+    \]
+    Concluimos que $D(na) = nD(a)$ para todo $n$ entero positivo.
+    Cuando $n = 0$, previamente obtuvimos $D(0 \cdot a) = D(0) = 0 = 0 \cdot D(a)$.
+    Cuando $n$ es un entero negativo, podemos escribirlo como $n = -m$ con $m > 0$.
+    De \cref{lema02} tenemos $D(na) = D((-m)a) = D(-ma)$ y por \cref{lema01}
+    la igualdad $-D(ma) = -(mDa) = (-m) D(a) = n D(a)$ cae por s\'i sola.
+
+    \item Probemos por inducci\'on que $D(x^n) = nx^{n+1}$.
+    Realizaremos la inducci\'on sobre el exponente. Para $n = 0$, tenemos
+    $D(1) = 0 = 0 \cdot x^{1}$ y para $n = 1$, $D(x) = x^2$ por la definici\'on
+    dada. Supongamos que se cumple para $n$, luego
+    $D(x^{n + 1})  = D(x \cdot x^n) = x D(x^n) + D(x) x^n =
+    x n x^{n + 1} + x^2 x^n = n x^{n + 2} + x^{n + 2} = (n + 1)x^{n + 2}$.
+    
+    Finalmente, haciendo uso del primer inciso tenemos que para cualquier
+    n\'umero entero $m$ se cumple $D(mx^{n}) = m D(x^n) = mnx^{n + 1}$.
+  \end{enumerate}
+\end{proof}
+
+\begin{statement}{2}
+  Una \textbf{$0$-forma diferencial} en tres variables es simplemente una
+  funci\'on de variable real que es infinitamente diferenciable.
+  Similarmente, una \textbf{$1$-forma} es una expresi\'on tipo 
+  \[
+    \omega = F \, dx + G \, dy + H \, dz,
+  \]
+  con $F, G, H$ infinitamente diferenciables; una \textbf{$2$-forma} toma la forma  
+  \[
+    \gamma = \alpha \, dx \, dy + \beta \, dx \, dz + \eta \, dy \, dz; 
+  \]
+  y una \textbf{$3$-forma} resulta ser 
+  \[
+    v \, dx \, dy \, dz.
+  \]
+  Estos espacios son denotados $\wedge^0, \wedge^1, \wedge^2, \wedge^3$, respectivamente. 
+  Para $f(x,y,z) \in \wedge^0$ se define 
+  \[
+    df=\frac{\partial f}{\partial x} \, dx +
+    \frac{\partial f}{\partial y} \, dy
+    + \frac{\partial f}{\partial z} \, dz
+    \in \wedge^1.
+  \]
+  Si solo est\'a permitido tomar derivadas parciales, cambiar de signo y reordenar, 
+  ?`c\'omo se deber\'ia definir $d:\wedge^1 \to \wedge^2$ para tener $d^2=d \circ d =0$? 
+  Si tomamos su respuesta como referencia,
+  ?`como ser\'ia razonable definir $d:\wedge^2 \to \wedge^3$?
+  
+  Nota: resulta \'util recordar que para funciones infinitamente diferenciables se cumple
+  \[
+    \frac{\partial^2 f}{\partial x_j \partial x_i}= \frac{\partial^2 f}{\partial x_i \partial x_j}.
+  \]
+\end{statement}
+
+\begin{proof}
+  Convenientemente, definimos $d: \wedge^1 \to \wedge^2$ con
+  \[
+    d(F \, dx + G \, dy + H \, dz)  =
+    \left(\frac{\partial F}{\partial y} - \frac{\partial G}{\partial x}\right) dx \, dy +
+    \left(\frac{\partial F}{\partial z} - \frac{\partial H}{\partial x}\right) dx \, dz +
+    \left(\frac{\partial G}{\partial z} - \frac{\partial H}{\partial y}\right) dy \, dz.
+  \]
+  Dada una funci\'on $f$ infinitamente diferenciable, aplicando nuestras
+  funciones definidas previamente y la nota obtenemos
+  \begin{align*}
+    d^2 f &= d(df)\\
+    &= d \left( \frac{\partial f}{\partial x} \, dx +
+    \frac{\partial f}{\partial y} \, dy
+    + \frac{\partial f}{\partial z} \, dz \right)\\
+    &=
+    \left(\frac{\partial^2 f}{\partial y \partial x} - \frac{\partial^2 f}{\partial x \partial y}\right) dx \, dy +
+    \left(\frac{\partial^2 f}{\partial z \partial x} - \frac{\partial^2 f}{\partial x \partial z}\right) dx \, dz +
+    \left(\frac{\partial^2 f}{\partial z \partial y} - \frac{\partial^2 f}{\partial y \partial z}\right) dy \, dz\\
+    &=
+    \left(\frac{\partial^2 f}{\partial x \partial y} - \frac{\partial^2 f}{\partial x \partial y}\right) dx \, dy +
+    \left(\frac{\partial^2 f}{\partial x \partial z} - \frac{\partial^2 f}{\partial x \partial z}\right) dx \, dz +
+    \left(\frac{\partial^2 f}{\partial y \partial z} - \frac{\partial^2 f}{\partial y \partial z}\right) dy \, dz\\
+    &= 0.
+  \end{align*}
+
+  Ahora definamos $d: \wedge^2 \to \wedge^3$ con
+  \[
+    d(\alpha \, dx \, dy + \beta \, dx \, dz + \eta \, dy \, dz) =
+    \left(
+      \frac{\partial \alpha}{\partial z} +
+      \frac{\partial \beta}{\partial y} +
+      \frac{\partial \eta}{\partial x}
+    \right)
+    dx \, dy \, dz;
+  \]
+  donde $\alpha, \beta$ y $\eta$ son infinitamente diferenciables.
+  Lo que es trivial, es trivial, y no hay verg\"uenza alguna de decir que
+  algo es trivial. En consecuencia, dado $\omega = F \, dx + G \, dy + H \, dz$
+  obtenemos $d^2 \omega = 0$.
+\end{proof}
+
+\begin{statement}{3}
+  Demuestre lo que hemos dado por llamar la protodesigualdad de Chebyshev: 
+  \textit{
+    si $f$ es acotada en $R$ y $\pi$ es una partici\'on de $R$ 
+    definimos $\pi^\eta=\{S \in \pi: M_S(f)-m_S(f) \ge \eta\}$.
+    Entonces se cumple 
+    \[
+      \sum_{S \in \pi^\eta} v(S) \le \frac{U(f,\pi)-L(f,\pi)}{\eta}. 
+    \]
+  }
+\end{statement}
+
+\begin{proof}
+  Sea $\eta$ un n\'umero positivo fijo pero arbitrario.
+  Escribamos la siguiente diferencia, la cual es factible debido a que $f$ es
+  acotada en $R$, y desarrollemos el embrollo utilizando las definiciones
+  \begin{align*}
+    U(f, \pi) - L(f, \pi) &= \sum_{S \in \pi} M_S(f) v(S) - \sum_{S \in \pi} m_S(f) v(S)\\
+    &= \sum_{S \in \pi} (M_S(f) - m_S(f)) v(S)\\
+    &= \sum_{S \in \pi^{\eta}} (M_S(f) - m_S(f)) v(S) + \sum_{S \in \pi \setminus \pi^{\eta}} (M_S(f) - m_S(f)) v(S)\\
+    &\geq \sum_{S \in \pi^{\eta}} (M_S(f) - m_S(f)) v(S)\\
+    &\geq \sum_{S \in \pi^{\eta}} \eta v(S)\\
+    \sum_{S \in \pi^{\eta}} v(S) &\leq \frac{U(f, \pi) - L(f, \pi)}{\eta}.
+  \end{align*}
+\end{proof}
+
+\begin{statement}{4}
+  En un producto cartesiano de rect\'angulos $R_1 \times R_2$ se define la funci\'on 
+  \[
+    F(x_1, x_2) = f_1(x_1) \cdot f_2(x_2),
+  \]
+  donde $f_1: R_1 \to \BR$ y $f_2: R_2 \to \BR$ son funciones \textbf{positivas integrables}.
+  Este ejercicio est\'a orientado a probar que $F$ es integrable en
+  $R_1 \times R_2$ y que se cumple 
+  \[
+    \int_{R_1 \times R_2} F = 
+    \left[ \int_{R_1} f_1 \right] \cdot
+    \left[ \int_{R_2} f_2 \right].
+  \]
+\end{statement}
+
+\begin{statement}{4.1}
+  Indique por qu\'e sin p\'erdida de generalidad se puede argumentar
+  en exclusiva con particiones producto para concluir el resultado.
+\end{statement}
+
+\medskip
+
+Podemos argumentar con particiones producto porque basta con obtener las
+desigualdades siguientes para alguna partici\'on arbitraria y estaremos
+obteniendo lo mismo para particiones m\'as finas. Por lo visto en clase, una
+partici\'on no uniforme podemos uniformizarla.
+
+\begin{statement}{4.2}
+  Si $\pi_i$ es una partici\'on de $R_i$, entonces para cada
+  rect\'angulo producto $S_1 \times S_2 \in \pi_1 \times \pi_2$  se cumple
+  \[
+    m_{S_1}(f_1) \cdot m_{S_2}(f_2) \le m_{S_1 \times S_2}(F) \le
+    M_{S_1 \times S_2}(F) \le M_{S_1}(f_1) \cdot M_{S_2}(f_2).
+  \]
+\end{statement}
+
+\begin{proof}
+  Para todo $s_i \in S_i$ tenemos que $0 \leq m_{S_i}(f_i) \leq f_i(s_i)$, por
+  lo que
+  \[
+    0 \leq m_{S_1}(f_1) \, m_{S_2}(f_2) \leq f_1(s_1) \, f_2(s_2) = F(s_1, s_2).
+  \]
+  Como $s_1$ y $s_2$ fueron arbitrarios, entonces $m_{S_1}(f_1) m_{S_2}(f_2)$
+  es una cota inferior para $F$, por lo que
+  \[
+    m_{S_1}(f_1) \, m_{S_2}(f_2) \leq m_{S_1 \times S_2} (F).
+  \]
+  De manera an\'aloga, conseguimos 
+  \[
+    M_{S_1 \times S_2} (F) \leq M_{S_1}(f_1) \, M_{S_2}(f_2).
+  \]
+
+  Juntando ambos resultados probamos $m_{S_1}(f_1) \cdot m_{S_2}(f_2) \le m_{S_1 \times S_2}(F) \le
+  M_{S_1 \times S_2}(F) \le M_{S_1}(f_1) \cdot M_{S_2}(f_2)$.
+\end{proof}
+
+\begin{statement}{4.3}
+  Concluya que se satisface 
+  \[
+    L(f_1, \pi_1) \cdot L(f_2, \pi_2) \le L(F,\pi_1 \times \pi_2) \le
+    U(F,\pi_1 \times \pi_2) \le U(f_1, \pi_1) \cdot U(f_2, \pi_2).
+  \]
+\end{statement}
+
+\begin{proof}
+  Desarrollemos el producto de la izquierda y utilicemos el inciso $4.2$
+  \begin{align*}
+    L(f_1, \pi_1) \, L(f_2, \pi_2) &=
+    \left(\sum_{S_1 \in \pi_1} m_{S_1}(f_1) v(S_1)\right)
+    \left(\sum_{S_2 \in \pi_2} m_{S_2}(f_2) v(S_2)\right)\\
+    &= \sum_{S_1 \in \pi_1} \sum_{S_2 \in \pi_2}
+    m_{S_1}(f_1) \, m_{S_2}(f_2) \, v(S_1) \, v(S_2)\\
+    &\leq \sum_{S_1 \in \pi_1} \sum_{S_2 \in \pi_2}
+    m_{S_1 \times S_2}(F) \, v(S_1) \, v(S_2)\\
+    &= \sum_{S_1 \in \pi_1} \sum_{S_2 \in \pi_2}
+    m_{S_1 \times S_2}(F) \, v(S_1 \times S_2)\\
+    &= \sum_{S_1 \times S_2 \in \pi_1 \times \pi_2}
+    m_{S_1 \times S_2}(F) \, v(S_1 \times S_2)\\
+    &= L(F, \pi_1 \times \pi_2)\\
+    &\leq U(F, \pi_1 \times \pi_2)\\
+    &= \sum_{S_1 \times S_2 \in \pi_1 \times \pi_2}
+    M_{S_1 \times S_2}(F) \, v(S_1 \times S_2)\\
+    &= \sum_{S_1 \in \pi_1} \sum_{S_2 \in \pi_2}
+    M_{S_1 \times S_2}(F) \, v(S_1 \times S_2)\\
+    &= \sum_{S_1 \in \pi_1} \sum_{S_2 \in \pi_2}
+    M_{S_1 \times S_2}(F) \, v(S_1) \, v(S_2)\\
+    &\leq \sum_{S_1 \in \pi_1} \sum_{S_2 \in \pi_2}
+    M_{S_1}(f_1) \, M_{S_2}(f_2) \, v(S_1) \, v(S_2)\\
+    &=
+    \left(\sum_{S_1 \in \pi_1} M_{S_1}(f_1) v(S_1)\right)
+    \left(\sum_{S_2 \in \pi_2} M_{S_2}(f_2) v(S_2)\right)\\
+    &= U(f_1, \pi_1) \, U(f_2, \pi_2).
+  \end{align*}
+\end{proof}
+
+\begin{statement}{4.4}
+  Remate.
+\end{statement}
+
+\begin{proof}
+  Tenemos
+  \[
+    0 \leq \bint_{R_i} f_i \leq L(f_i, \pi_i)
+  \]
+  para cualquier partici\'on $\pi_i$ de $R_i$.
+  En consecuencia,
+  \[
+    0 \leq \bint_{R_1} f_1 \bint_{R_2} f_2 \leq L(f_1, \pi_1) L(f_2, \pi_2).
+  \]
+  Por transitividad obtenemos
+  \[
+    \bint_{R_1} f_1 \bint_{R_2} f_2 \leq L(F, \pi_1 \times \pi_2).
+  \]
+  y al ser esto una cota inferior para cualquier par de particiones, acontece
+  \[
+    \bint_{R_1} f_1 \bint_{R_2} f_2 \leq
+    \bint_{R_1 \times R_2} F \leq
+    L(F, \pi_1 \times \pi_2).
+  \]
+  An\'alogamente obtenemos la desiguladad por la derecha
+  \[
+    U(F, \pi_1 \times \pi_2) \leq
+    \tint_{R_1 \times R_2} F \leq
+    \tint_{R_1} f_1 \tint_{R_2} f_2.  
+  \]
+
+  Utilizamos el inciso $4.3$ para poder atar los cabos sueltos
+  \[
+    \bint_{R_1} f_1 \bint_{R_2} f_2 \leq
+    \bint_{R_1 \times R_2} F \leq
+    \tint_{R_1 \times R_2} F \leq
+    \tint_{R_1} f_1 \tint_{R_2} f_2 
+  \]
+  y abusando del hecho de que $f_1$ y $f_2$ son integrables, tenemos que
+  los extremos son iguales, por lo que no nos queda otra que concluir que
+  \[
+    \int_{R_1} f_1 \int_{R_2} f_2 =
+    \bint_{R_1 \times R_2} F =
+    \tint_{R_1 \times R_2} F =
+    \int_{R_1 \times R_2} F.
+  \]
+\end{proof}
+
+\begin{statement}{4.5}
+  Utilice la linealidad de la integral para demostrar que el resultado permanece
+  en pie si se toman las $f_i$ integrables pero no se asume positividad.
+\end{statement}
+
+\begin{proof}
+  Tenemos que $f_i$ es integrable en $R_i$, lo cual implica que para cualquier
+  partici\'on $\pi_i$ de $R_i$ se cumple
+  $\int_{R_i} f_i = \sum_{S \in \pi_i} \int_{S} f_i$.
+  En particular, sea $\pi_i = R_i^+ \cup R_i^0 \cup R_i^-$ una partici\'on de
+  $R_i$ en la cual $R_i^+$ son todos aquellos puntos $r_i \in R_i$ tales que
+  $f(r_i)$ es positivo y an\'alogamente para $R_i^0$ y $R_i^-$ pero con aquellos
+  cuyas im\'agenes son iguales a cero o negativas, respectivamente.
+  Ahora escribamos al producto de la siguiente manera:
+  \begin{align*}
+    \left(\int_{R_1} f_1\right) \left(\int_{R_2} f_2\right)
+    &= \left(\int_{R_1^-} f_1 + \int_{R_1^0} f_1 + \int_{R_1^+} f_1\right)
+    \left(\int_{R_2^-} f_2 + \int_{R_2^0} f_2 + \int_{R_2^+} f_2\right)\\
+  \end{align*}
+  Aprovechemos la masacre en el inciso $4.4$,
+  combinaci\'on lineal de funciones integrables es integrable y
+  la linealidad para conseguir integrales de funciones no negativas que
+  luego ser\'an reunificadas
+  \begin{align*}
+    \left(\int_{R_1} f_1\right) \left(\int_{R_2} f_2\right)
+    &= \left(-\int_{R_1^-} (-f_1) + \int_{R_1^0} f_1 + \int_{R_1^+} f_1\right)
+    \left(-\int_{R_2^-} (-f_2) + \int_{R_2^0} f_2 + \int_{R_2^+} f_2\right)\\
+    &= \left(\int_{R_1^-} (-f_1) \int_{R_2^-} (-f_2)\right)
+    - \left(\int_{R_1^-} (-f_1) \int_{R_2^0} f_2\right)
+    - \left(\int_{R_1^-} (-f_1) \int_{R_2^+} f_2\right)\\
+    &- \left(\int_{R_1^0} f_1 \int_{R_2^-} (-f_2)\right)
+    + \left(\int_{R_1^0} f_1 \int_{R_2^0} f_2\right)
+    + \left(\int_{R_1^0} f_1 \int_{R_2^+} f_2\right)\\
+    &- \left(\int_{R_1^+} f_1 \int_{R_2^-} (-f_2)\right)
+    + \left(\int_{R_1^+} f_1 \int_{R_2^0} f_2\right)
+    + \left(\int_{R_1^+} f_1 \int_{R_2^+} f_2\right)\\
+    &= \left(\int_{R_1^- \times R_2^-} F \right)
+    - \left(\int_{R_1^- \times R_2^0} -F \right)
+    - \left(\int_{R_1^- \times R_2^+} -F \right)\\
+    &- \left(\int_{R_1^0 \times R_2^-} -F \right)
+    + \left(\int_{R_1^0 \times R_2^0} F \right)
+    + \left(\int_{R_1^0 \times R_2^+} F \right)\\
+    &- \left(\int_{R_1^+ \times R_2^-} -F \right)
+    + \left(\int_{R_1^+ \times R_2^0} F \right)
+    + \left(\int_{R_1^+ \times R_2^+} F \right)\\
+    &= \left(\int_{R_1^- \times R_2^-} F \right)
+    + \left(\int_{R_1^- \times R_2^0} F \right)
+    + \left(\int_{R_1^- \times R_2^+} F \right)\\
+    &+ \left(\int_{R_1^0 \times R_2^-} F \right)
+    + \left(\int_{R_1^0 \times R_2^0} F \right)
+    + \left(\int_{R_1^0 \times R_2^+} F \right)\\
+    &+ \left(\int_{R_1^+ \times R_2^-} F \right)
+    + \left(\int_{R_1^+ \times R_2^0} F \right)
+    + \left(\int_{R_1^+ \times R_2^+} F \right)\\
+    &= \int_{R_1 \times R_2} F.
+  \end{align*}
+  Finalmente, hemos podido llegar a la igualdad inicial sin asumir positividad.
+\end{proof}
+
+\begin{statement}{5}
+  Considere el cuadrado con v\'ertices $(0,1),(1,0),(-1,0)$ y $(0,-1)$ en el
+  plano. Aproxime desde dentro su \'area con rect\'angulos que en conjunto
+  sumen al menos $2 -\epsilon$. Similarmente, aproxime desde fuera su \'area
+  con rect\'angulos (o cuadrados) que en conjunto no superen $2 + \epsilon$.
+\end{statement}
+
+\begin{proof}
+  Primero hallemos una aproximaci\'on del \'area mediante rect\'angulos en el
+  interior del cuadrado dado analizando el tri\'angilo con v\'ertices $(0, 1), (1, 0)$
+  y $(-1, 0)$; luego el proceso para hallar el \'area del tri\'angulo inferior
+  con v\'ertices $(1, 0), (-1, 0)$ y $(0, -1)$ es an\'alogo.
+  Dado un $\epsilon$ positivo fijo pero arbitrario, quiero que el \'area de los
+  rect\'angulos interiores al tri\'angulo superior sumen al menos
+  $1 - \epsilon / 2$. Dividiremos el intervalo $[0, 1]$ del eje $y$ en $n$ partes
+  pero tan solo utilizar\'e los $n - 1$ intervalos $[(i - 1) / n, i / n]$ donde
+  $i$ toma los valores desde $1$ hasta $n - 1$. De esta manera, el rect\'angulo
+  que tomaremos en cada intervalo ser\'a aquel cuyos v\'ertices sean
+  las intersecciones de los lados del cuadrado con extremos $(1, 0)$ y $(0, 1)$
+  y extremos $(-1, 0)$ y $(0, 1)$ con las rectas paralelas al eje $x$ que
+  pasan por los extremos de nuestros intervalos $[(i - 1) / n, i / n]$.
+  De esta manera, definimos a $T$ como la uni\'on de $n$ rect\'angulos
+  interiores con interior disjunto donde el $i$-\'esimo rect\'angulo tiene como
+  v\'ertices a los puntos
+  $(1 - i / n, (i - 1) / n),
+  (-1 + i / n, (i - 1) / n),
+  (-1 + i / n, i / n) \text{ y }
+  (1 - i / n, i / n)$.
+
+  El volumen del conjunto $T$ es
+  \begin{align*}
+    v(T) &= \sum_{i = 1}^{n - 1} \left(2 - \frac{2i}{n}\right) \frac{1}{n}\\
+    &= \frac{2 (n - 1)}{n} - \frac{2 (n - 1) n}{2n^2}\\
+    &= 1 - \frac{1}{n}.
+  \end{align*}
+
+  Para $\epsilon \leq 2$, trivialmente $n = 2$ satisface con la desigualdad.
+  Cuando $\epsilon < 2$, tenemos que $n = \ceil*{2 / \epsilon}$ cumple con lo
+  requerido, pues
+
+  \begin{align*}
+    n &\geq \frac{2}{\epsilon}\\
+    \frac{\epsilon}{2} &\geq \frac{1}{n}\\
+    \frac{n - 1}{n} &\geq 1 - \frac{\epsilon}{2}\\
+    v(T) &\geq 1 - \frac{\epsilon}{2}.
+  \end{align*}
+
+  An\'alogamente, el volumen de la construcci\'on inferior es mayor o igual
+  a $1 - \epsilon / 2$. As\'i, concluimos que la suma de vol\'umenes de
+  ambas construcciones es mayor o igual a $2 - \epsilon$.
+
+  Ahora hallemos una aproximaci\'on del \'area mediante rect\'angulos
+  externos. Sea $T$ la uni\'on de $n$ rect\'angulos donde
+  el $i$-\'esimo rect\'angulo tiene como v\'ertices los puntos
+  $(-1 + (i - 1) / n, (i - 1) / n),
+  (-1 + (i - 1) / n, i / n),
+  (1 - (i - 1) / n, (i - 1) / n) \text{ y }
+  (1 - (i - 1) / n, i / n)$.
+  Estos rect\'angulos tienen interior disjunto y el volumen de la uni\'on es
+
+  \begin{align*}
+    v(T) &= \sum_{i = 1}^n \left(2 - 2 \frac{(i - 1)}{n}\right) \frac{1}{n}\\
+    &= \sum_{i = 1}^n \left(\frac{2}{n} - \frac{2i}{n^2} + \frac{2}{n^2}\right)\\
+    &= 2 - \frac{2 n (n + 1)}{2 n^2} + \frac{2}{n}\\
+    &= 1 + \frac{1}{n}.
+  \end{align*}
+
+  De esta manera, para $n = \floor*{2 / \epsilon} + 1$ tenemos que el \'area es
+  menor o igual que $1 - \epsilon / 2$.
+  Realizamos el mismo proceso cubriendo el tri\'angulo inferior con rect\'angulos
+  con v\'ertices en
+  $(-1 + (i - 1) / n, -(i - 1) / n,
+  (-1 + (i - 1) / n, - i / n),
+  (1 - (i - 1) / n, - (i - 1) / n) \text{ y }
+  (1 - (i - 1) / n, - i / n)$,
+  para cada entero $i$ desde $1$ hasta $n = \floor*{2 / \epsilon} + 1$.
+
+  Finalmente, la suma de ambas \'areas es menor o igual a $2 + \epsilon$.
+\end{proof}
+
+\end{document}
