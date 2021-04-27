@@ -243,11 +243,11 @@
   \[
     d(\alpha \, dx \, dy + \beta \, dx \, dz + \eta \, dy \, dz) =
     \left(
-      \frac{\partial \alpha}{\partial z} +
+      \frac{\partial \alpha}{\partial z} -
       \frac{\partial \beta}{\partial y} +
       \frac{\partial \eta}{\partial x}
     \right)
-    dx \, dy \, dz;
+    dx \, dy \, dz,
   \]
   donde $\alpha, \beta$ y $\eta$ son infinitamente diferenciables.
   Lo que es trivial, es trivial, y no hay verg\"uenza alguna de decir que
@@ -380,34 +380,81 @@ partici\'on no uniforme podemos uniformizarla.
   Remate.
 \end{statement}
 
+\medskip
+
+Antes de realizar el pago para el proceso de liberaci\'on de aduanas,
+probemos los siguientes lemas.
+
+\begin{lemma}\label{lema03}
+  Sean $A$ y $B$ dos subconjuntos de $\BR^+$ no vac\'ios y acotados superiormente
+  por un n\'umero positivo.
+  Luego tenemos
+  \[
+    \sup_{a \in A} \{a\} \, \sup_{b \in B} \{b\} =
+    \sup_{(a, b) \in A \times B} \{ab\}.
+  \]
+\end{lemma}
+
 \begin{proof}
-  Tenemos
+  Sean $a \in A$ y $b \in B$ elementos arbitrarios de ambos conjuntos, tenemos
+  que $a \leq \sup_{a \in A} \{a\}$ y $b \leq \sup_{b \in B} \{b\}$.
+  Como ambos son mayores que cero, podemos multiplicar y obtener
+  \begin{align*}
+    a b &\leq \sup_{a \in A} \{a\} \sup_{b \in B} \{B\}\\
+    \sup_{(a, b) \in A \times B} \{a b\} &\leq \sup_{a \in A} \{a\} \sup_{b \in B} \{B\}\\
+  \end{align*}
+  
+  El producto cartesiano de dos conjuntos no vac\'ios y acotados es no vac\'io
+  y acotado, por lo que existe
+  $s = \sup_{(a, b) \in A \times B} \{a b\}$.
+  Para cualquier par de elementos arbitrarios tenemos $ab \leq s$. Como $a$ es
+  positivo, tenemos $b \leq s / a$. Como esto se cumple para cualquier $b \in B$,
+  entonces $\sup_{b \in B} \{b\} \leq s / a$. Como todos los elementos de $B$
+  son positivos, el supremo de dicho conjunto tambi\'en es positivo y podemos
+  despejar $a \leq s / \sup_{b \in B} \{b\}$. Como esto se cumple para cualquier
+  $a \in A$, entonces $\sup_{a \in A} \{a\} \leq s / \sup_{b \in B} \{b\}$.
+  Despejando conseguimos $\sup_{a \in A} \{a\} \sup_{b \in B} \{b\} \leq s$.
+  Finalmente, podemos concluir con $\sup_{a \in A} \{a\} \, \sup_{b \in B} \{b\}
+  = \sup_{(a, b) \in A \times B} \{ab\}$.
+\end{proof}
+
+\begin{lemma}\label{lema04}
+  Sean $A$ y $B$ dos subconjuntos de $\BR^+$ no vac\'ios y acotados inferiormente
+  por un n\'umero positivo.
+  Luego tenemos
   \[
-    0 \leq \bint_{R_i} f_i \leq L(f_i, \pi_i)
+    \inf_{a \in A} \{a\} \, \inf_{b \in B} \{b\} =
+    \inf_{(a, b) \in A \times B} \{ab\}.
   \]
-  para cualquier partici\'on $\pi_i$ de $R_i$.
-  En consecuencia,
+\end{lemma}
+
+\begin{proof}
+  La prueba es an\'aloga a \cref{lema03}.
+\end{proof}
+
+Una vez tramitado el RUC, podemos continuar con el proceso aduanero.
+
+\begin{proof}
+  Por la izquierda tenemos
   \[
-    0 \leq \bint_{R_1} f_1 \bint_{R_2} f_2 \leq L(f_1, \pi_1) L(f_2, \pi_2).
+    0 \leq L(f_i, \pi_i) \leq \bint f_i
   \]
-  Por transitividad obtenemos
+  y utilizando \cref{lema03} y el inciso $4.3$ para obtener la desigualdad
+  de los supremos conseguimos
+  \begin{align*}
+    L(f_1, \pi_1) L(f_2, \pi_2) &\leq \bint_{R_1} f_1 \bint_{R_2} f_2\\
+    &= \sup_{\pi_1}\{L(f_1, \pi_1)\} \sup_{\pi_2}\{L(f_2, \pi_2)\}\\
+    &= \sup_{\pi_1 \times \pi_2} \{L(f_1, \pi_1) L(f_2, \pi_2)\}\\
+    &\leq \sup_{\pi \times \pi_2} \{L(F, \pi_1 \times \pi_2)\}\\
+    &= \bint_{R_1 \times R_2} F.
+  \end{align*}
+  An\'alogamente obtenemos la desigualdad por la derecha
   \[
-    \bint_{R_1} f_1 \bint_{R_2} f_2 \leq L(F, \pi_1 \times \pi_2).
-  \]
-  y al ser esto una cota inferior para cualquier par de particiones, acontece
-  \[
-    \bint_{R_1} f_1 \bint_{R_2} f_2 \leq
-    \bint_{R_1 \times R_2} F \leq
-    L(F, \pi_1 \times \pi_2).
-  \]
-  An\'alogamente obtenemos la desiguladad por la derecha
-  \[
-    U(F, \pi_1 \times \pi_2) \leq
     \tint_{R_1 \times R_2} F \leq
     \tint_{R_1} f_1 \tint_{R_2} f_2.  
   \]
 
-  Utilizamos el inciso $4.3$ para poder atar los cabos sueltos
+  Atamos los cabos sueltos
   \[
     \bint_{R_1} f_1 \bint_{R_2} f_2 \leq
     \bint_{R_1 \times R_2} F \leq
